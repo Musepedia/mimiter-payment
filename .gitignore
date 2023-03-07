@@ -29,6 +29,7 @@ hs_err_pid*
 */target/*
 log/
 logs/
+target
 
 *.iml
 id_rsa
