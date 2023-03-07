@@ -49,6 +49,10 @@ spring:
   profiles:
     active: default
 
+grpc:
+  server:
+    port: 15016
+
 uid:
   timeBits: 30             # 时间位, 默认:30
   workerBits: 16           # 机器位, 默认:16

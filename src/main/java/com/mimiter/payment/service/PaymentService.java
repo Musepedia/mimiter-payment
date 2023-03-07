@@ -1,11 +1,12 @@
 package com.mimiter.payment.service;
 
-import com.mimiter.payment.model.request.PrepayReq;
+import com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPaymentResponse;
 
 /**
  * 支付服务
  */
 public interface PaymentService {
 
-    String prepay(PrepayReq req);
+    PrepayWithRequestPaymentResponse prepay(int amount, String description,
+                                            String openId, long expireInMillis, String appId);
 }

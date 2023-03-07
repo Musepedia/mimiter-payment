@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.mimiter.payment";
+option java_outer_classname = "PaymentProto";
+
+service PaymentService {
+    rpc Prepay(PrepayReq) returns (PrepayResp) {}
+}
+
+message PrepayReq {
+    int32 amount = 1;
+    string description = 2;
+    string openId = 3;
+    int64 expireInMillis = 4;
+    string appId = 5;
+}
+
+message PrepayResp {
+    string packageVal = 1;
+    string timestamp = 2;
+    string nonceStr = 3;
+    string paySign = 4;
+}
+

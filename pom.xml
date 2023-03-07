@@ -12,6 +12,8 @@
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <grpc.version>1.40.1</grpc.version>
+    <protobuf.version>3.17.3</protobuf.version>
   </properties>
 
 
@@ -45,7 +47,6 @@
       <artifactId>spring-session-bom</artifactId>
       <version>2021.0.2</version>
       <type>pom</type>
-      <scope>import</scope>
     </dependency>
     <!-- persistence -->
     <dependency>
@@ -92,6 +93,28 @@
       </exclusions>
     </dependency>
     <!-- core -->
+    <!-- grpc -->
+    <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-stub</artifactId>
+      <version>${grpc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.grpc</groupId>
+      <artifactId>grpc-protobuf</artifactId>
+      <version>${grpc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.devh</groupId>
+      <artifactId>grpc-client-spring-boot-starter</artifactId>
+      <version>2.12.0.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>net.devh</groupId>
+      <artifactId>grpc-server-spring-boot-starter</artifactId>
+      <version>2.12.0.RELEASE</version>
+    </dependency>
+    <!-- grpc -->
   </dependencies>
 
   <build>
@@ -103,7 +126,84 @@
           <skip>true</skip>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <!-- 复制第三方 jar 到项目目录下的 target/lib/ 下 -->
+          <execution>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <excludeScope>provided</excludeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <!-- 指定 Spring Boot 启动类，实际测试中必须 -->
+              <mainClass>com.mimiter.mgs.core.App</mainClass>
+              <!-- 将所有第三方 jar 添加到项目 jar 的 MANIFEST.MF 文件中，这样运行 jar 时依赖包才能被加载 -->
+              <addClasspath>true</addClasspath>
+              <!-- 指定复制第三方 jar 的目标目录为 target/lib/-->
+              <classpathPrefix>./lib/</classpathPrefix>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.5.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <include>
+              <groupId>nothing</groupId>
+              <artifactId>nothing</artifactId>
+            </include>
+          </includes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.xolstice.maven.plugins</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
+        <version>0.6.1</version>
+        <configuration>
+          <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+          <pluginId>grpc-java</pluginId>
+          <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>compile-custom</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.6.2</version>
+      </extension>
+    </extensions>
   </build>
 
   <repositories>
