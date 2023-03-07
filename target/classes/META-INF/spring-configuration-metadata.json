@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "name": "mimiter.payment.wx",
+      "type": "com.mimiter.payment.config.WxPaymentConfig",
+      "sourceType": "com.mimiter.payment.config.WxPaymentConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "mimiter.payment.wx.api-v3key",
+      "type": "java.lang.String",
+      "description": "商户APIV3密钥",
+      "sourceType": "com.mimiter.payment.config.WxPaymentConfig"
+    },
+    {
+      "name": "mimiter.payment.wx.merchant-id",
+      "type": "java.lang.String",
+      "sourceType": "com.mimiter.payment.config.WxPaymentConfig"
+    },
+    {
+      "name": "mimiter.payment.wx.merchant-serial-number",
+      "type": "java.lang.String",
+      "description": "商户证书序列号",
+      "sourceType": "com.mimiter.payment.config.WxPaymentConfig"
+    },
+    {
+      "name": "mimiter.payment.wx.notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.mimiter.payment.config.WxPaymentConfig"
+    },
+    {
+      "name": "mimiter.payment.wx.private-key",
+      "type": "java.lang.String",
+      "sourceType": "com.mimiter.payment.config.WxPaymentConfig"
+    }
+  ],
+  "hints": []
+}

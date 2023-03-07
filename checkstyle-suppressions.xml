@@ -1,0 +1,8 @@
+<!DOCTYPE suppressions PUBLIC "-//Puppy Crawl//DTD Suppressions 1.1//EN" "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+  <suppress files="[/\\]test[/\\]" checks=".*" />
+  <suppress files="[/\\]mgsbackend-label[/\\]" checks=".*" />
+  <!-- 忽略Repository中sql语句换行时+号在行尾 -->
+  <!-- 忽略Repository类注释 -->
+  <suppress files="[/\\]repository[/\\].*Repository\.java" checks="OperatorWrap" />
+</suppressions>
