@@ -1,21 +1,23 @@
 package com.mimiter.payment.service.impl;
 
 import com.github.wujun234.uid.UidGenerator;
-import com.mimiter.payment.PaymentServiceGrpc;
-import com.mimiter.payment.PrepayResp;
+import com.google.protobuf.Empty;
+import com.mimiter.payment.*;
 import com.mimiter.payment.config.WxPaymentConfig;
-import com.mimiter.payment.model.request.PrepayReq;
 import com.mimiter.payment.service.PaymentService;
-import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAAutoCertificateConfig;
-import com.wechat.pay.java.service.payments.jsapi.JsapiService;
+import com.wechat.pay.java.core.notification.Notification;
+import com.wechat.pay.java.core.notification.NotificationParser;
+import com.wechat.pay.java.core.notification.RequestParam;
 import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import com.wechat.pay.java.service.payments.jsapi.model.*;
+import com.wechat.pay.java.service.payments.model.Transaction;
+import com.wechat.pay.java.service.refund.model.Refund;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.var;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -37,24 +39,26 @@ public class PaymentServiceImpl
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
-    // 15分钟
-    private static final long EXPIRE_IN_MILLIS = 15 * 60 * 1000;
     private JsapiServiceExtension jsapiService;
+
+    private NotificationParser notificationParser;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Config config = new RSAAutoCertificateConfig.Builder()
+        var config = new RSAAutoCertificateConfig.Builder()
                 .merchantId(wxPaymentConfig.getMerchantId())
                 .privateKeyFromPath(wxPaymentConfig.getPrivateKey())
                 .merchantSerialNumber(wxPaymentConfig.getMerchantSerialNumber())
                 .apiV3Key(wxPaymentConfig.getApiV3key())
                 .build();
         jsapiService = new JsapiServiceExtension.Builder().config(config).build();
+        notificationParser = new NotificationParser(config);
     }
 
     @Override
     @Transactional
-    public PrepayWithRequestPaymentResponse prepay(int amount, String description, String openId, long expireInMillis, String appId) {
+    public PrepayWithRequestPaymentResponse prepay(
+            int amount, String description, String openId, long expireInMillis, String appId) {
         Assert.isTrue(amount > 0, "金额必须大于0");
         Assert.hasText(openId, "openId不能为空");
         Assert.hasText(appId, "appid不能为空");
@@ -81,7 +85,18 @@ public class PaymentServiceImpl
     }
 
     @Override
-    public void prepay(com.mimiter.payment.PrepayReq request, StreamObserver<PrepayResp> responseObserver) {
+    public void handleTransactionNotification(RequestParam requestParam) {
+        var transaction = notificationParser.parse(requestParam, Transaction.class);
+    }
+
+    @Override
+    public void handleRefundNotification(RequestParam requestParam) {
+        var refund = notificationParser.parse(requestParam, Refund.class);
+    }
+
+    @Override
+    public void prepay(com.mimiter.payment.PrepayReq request,
+                       StreamObserver<PrepayResp> responseObserver) {
         PrepayWithRequestPaymentResponse prepayResp = prepay(
                 request.getAmount(),
                 request.getDescription(),
@@ -96,5 +111,20 @@ public class PaymentServiceImpl
                 .build();
         responseObserver.onNext(resp);
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getTransaction(GetTransactionReq request, StreamObserver<GetTransactionResp> responseObserver) {
+        super.getTransaction(request, responseObserver);
+    }
+
+    @Override
+    public void closeTransaction(CloseTransactionReq request, StreamObserver<Empty> responseObserver) {
+        super.closeTransaction(request, responseObserver);
+    }
+
+    @Override
+    public void refund(RefundReq request, StreamObserver<RefundResp> responseObserver) {
+        super.refund(request, responseObserver);
     }
 }

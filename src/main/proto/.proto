@@ -4,8 +4,13 @@ option java_multiple_files = true;
 option java_package = "com.mimiter.payment";
 option java_outer_classname = "PaymentProto";
 
+import "google/protobuf/empty.proto";
+
 service PaymentService {
     rpc Prepay(PrepayReq) returns (PrepayResp) {}
+    rpc GetTransaction(GetTransactionReq) returns (GetTransactionResp) {}
+    rpc CloseTransaction(CloseTransactionReq) returns (google.protobuf.Empty) {}
+    rpc Refund(RefundReq) returns (RefundResp) {}
 }
 
 message PrepayReq {
@@ -21,5 +26,30 @@ message PrepayResp {
     string timestamp = 2;
     string nonceStr = 3;
     string paySign = 4;
+    string outTradeNo = 5;
+}
+
+message GetTransactionReq {
+    string transactionId = 1;
+    string outTradeNo = 2;
+}
+
+message GetTransactionResp {
+
+}
+
+message CloseTransactionReq {
+    string outTradeNo = 1;
+}
+
+message RefundReq {
+    string transactionId = 1;
+    string outTradeNo = 2;
+    string reason = 3;
+    int32 refund = 4;
+}
+
+message RefundResp {
+
 }
 

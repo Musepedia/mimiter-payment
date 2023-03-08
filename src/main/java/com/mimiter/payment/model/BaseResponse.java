@@ -18,7 +18,7 @@ public class BaseResponse<T> {
     /**
      * 返回码，与http状态码一致。
      */
-    private Integer status;
+    private Integer code;
 
     /**
      * 返回信息，抛出异常时会附带异常信息，正常返回任意值（"ok", null）皆可。
@@ -68,7 +68,7 @@ public class BaseResponse<T> {
     }
 
     /**
-     * 请求异常返回，{@link #status}为400。
+     * 请求异常返回，{@link #code}为400。
      *
      * @param message 异常信息
      * @param <T>     /

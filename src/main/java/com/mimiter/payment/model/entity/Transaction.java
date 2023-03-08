@@ -8,7 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order extends BaseEntity {
+public class Transaction extends BaseEntity {
 
-    private String id;
+    private String outTradeNo;
+
+    private String transactionId;
+
+    private Integer amount;
+
+
 }
