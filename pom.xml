@@ -149,7 +149,7 @@
           <archive>
             <manifest>
               <!-- 指定 Spring Boot 启动类，实际测试中必须 -->
-              <mainClass>com.mimiter.mgs.core.App</mainClass>
+              <mainClass>com.mimiter.payment.App</mainClass>
               <!-- 将所有第三方 jar 添加到项目 jar 的 MANIFEST.MF 文件中，这样运行 jar 时依赖包才能被加载 -->
               <addClasspath>true</addClasspath>
               <!-- 指定复制第三方 jar 的目标目录为 target/lib/-->
