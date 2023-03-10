@@ -20,6 +20,8 @@ services:
       - mgs_mgs
     ports:
       - "16004:16004"
+    volumes:
+      - ./secret:/opt/mimiter-payment/secret
     environment:
       ENV_MYSQL_HOST: mysql:3306
       ENV_MYSQL_USER: root

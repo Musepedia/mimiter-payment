@@ -5,11 +5,12 @@ ARG WORKDIR=/opt/mimiter-payment
 
 WORKDIR ${WORKDIR}
 COPY target/lib ./lib
-COPY target/*.jar payment.jar
-
-EXPOSE ${PORT}
 
 ENV TZ=Asia/Shanghai
 ENV SPRING_PROFILES_ACTIVE=prod
+
+EXPOSE ${PORT}
+
+COPY target/*.jar payment.jar
 
 ENTRYPOINT java -jar payment.jar

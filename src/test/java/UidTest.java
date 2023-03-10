@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = App.class)
-@ActiveProfiles("test")
+@ActiveProfiles(value = {"test", "local"})
 public class UidTest {
 
     @Resource(name = "defaultUidGenerator")
