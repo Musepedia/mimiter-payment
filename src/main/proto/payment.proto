@@ -14,38 +14,63 @@ service PaymentService {
 }
 
 message PrepayReq {
+    // 支付金额（单位分）
     int32 amount = 1;
+    // 支付描述
     string description = 2;
+    // 支付用户微信的openId（Code2Session获取）
     string openId = 3;
+    // 订单过期时间（毫秒）
     int64 expireInMillis = 4;
+    // 公众号/小程序等APPId
     string appId = 5;
 }
 
 message PrepayResp {
+    /* 前四个字段前端调起微信支付需要 */
     string packageVal = 1;
     string timestamp = 2;
     string nonceStr = 3;
     string paySign = 4;
+    // 商户侧订单号，一般通过此定位微信侧订单
     string outTradeNo = 5;
 }
 
 message GetTransactionReq {
+    // 微信侧交易ID，与OutTradeNo二选一
     string transactionId = 1;
+    // 商户侧交易ID，与TransactionId二选一
     string outTradeNo = 2;
 }
 
 message GetTransactionResp {
-
+    string appId = 1;
+    string mchId = 2;
+    string outTradeNo = 3;
+    string transactionId = 4;
+    string openId = 5;
+    string successTime = 6;
+    string tradeState = 7;
+    string tradeType = 8;
+    int32 total = 9;
+    int32 payerTotal = 10;
 }
 
 message CloseTransactionReq {
-    string outTradeNo = 1;
+    // 微信侧交易ID，与OutTradeNo二选一
+    string transactionId = 1;
+    // 商户侧交易ID，与TransactionId二选一
+    string outTradeNo = 2;
 }
 
 message RefundReq {
+    // 微信侧交易ID，与OutTradeNo二选一
     string transactionId = 1;
+    // 商户侧交易ID，与TransactionId二选一
     string outTradeNo = 2;
+    // 退款原因
     string reason = 3;
+    // 退款金额（单位分）
     int32 refund = 4;
 }
 

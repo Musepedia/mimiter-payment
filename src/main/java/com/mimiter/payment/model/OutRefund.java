@@ -12,29 +12,22 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("payment_order")
+@TableName("payment_refund")
 @EqualsAndHashCode(callSuper = false)
-public class Order extends BaseEntity{
+public class OutRefund extends BaseEntity{
 
-    @TableId(value = "out_trade_no", type = IdType.INPUT)
+    @TableId(value = "out_refund_no", type = IdType.INPUT)
+    private String outRefundNo;
+
+    @TableField("out_trade_no")
     private String outTradeNo;
+
+    @TableField("refund_id")
+    private String refundId;
 
     @TableField("transaction_id")
     private String transactionId;
 
-    @TableField("open_id")
-    private String openId;
-
-    @TableField("amount")
-    private Integer amount;
-
-    @TableField("trade_state")
-    private String tradeState;
-
-    @TableField("description")
-    private String description;
-
-    @TableField("app_id")
-    private String appId;
-
+    @TableField("payer_refund")
+    private Integer payerRefund;
 }
